@@ -33,6 +33,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
 
 interface TreatmentPlansProps {
   treatmentPlans: TreatmentPlan[];
@@ -138,6 +141,57 @@ export default function TreatmentPlans({ treatmentPlans }: { treatmentPlans: Tre
       };
       setPlans(prevPlans => [...prevPlans, newPlan]);
   };
+  
+  const exportToPDF = (plan: TreatmentPlan) => {
+    const doc = new jsPDF();
+    
+    // Header
+    doc.setFontSize(22);
+    doc.setFont("helvetica", "bold");
+    doc.text("DentiCare Maroc", 14, 22);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text("123 Avenue des Soins, Casablanca", 14, 30);
+    doc.text("contact@denticare.ma | +212 5 22 00 11 22", 14, 35);
+    
+    // Devis title
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.text(`Devis: ${plan.title}`, 14, 50);
+
+    // Plan info
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Date: ${plan.date}`, 14, 60);
+    doc.text(`N° du Plan: ${plan.id}`, 14, 65);
+    
+    // Table
+    autoTable(doc, {
+        startY: 75,
+        head: [['Soin', 'Description', 'Coût (MAD)']],
+        body: plan.treatments.map(t => [
+            t.tooth ? `Dent n°${t.tooth}` : 'Général',
+            t.procedure,
+            t.cost > 0 ? t.cost.toFixed(2) : 'N/A'
+        ]),
+        theme: 'striped',
+        headStyles: { fillColor: [105, 162, 151] } // Primary color
+    });
+    
+    // Total
+    const finalY = (doc as any).lastAutoTable.finalY;
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("Coût Total:", 140, finalY + 15, { align: 'right' });
+    doc.text(`${plan.totalCost.toFixed(2)} MAD`, 200, finalY + 15, { align: 'right' });
+
+    // Footer
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "italic");
+    doc.text("Devis valable 30 jours. Merci de votre confiance.", 14, doc.internal.pageSize.height - 10);
+
+    doc.save(`devis-${plan.id}.pdf`);
+  };
 
 
   return (
@@ -182,7 +236,7 @@ export default function TreatmentPlans({ treatmentPlans }: { treatmentPlans: Tre
                         </div>
                         <div className="mt-4 flex gap-2">
                             <Button variant="outline">Modifier le statut</Button>
-                            <Button variant="ghost"><FileText className="mr-2 h-4 w-4"/> Exporter en PDF</Button>
+                            <Button variant="ghost" onClick={() => exportToPDF(plan)}><FileText className="mr-2 h-4 w-4"/> Exporter en PDF</Button>
                         </div>
                     </AccordionContent>
                 </Card>
