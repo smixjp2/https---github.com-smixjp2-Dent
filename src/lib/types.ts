@@ -44,3 +44,12 @@ export type InventoryItem = {
   maxStock: number;
   status: 'In Stock' | 'Low Stock' | 'Out of Stock';
 };
+
+export type TreatmentPlan = {
+  id: string;
+  title: string;
+  date: string;
+  status: 'Proposed' | 'Accepted' | 'In Progress' | 'Completed';
+  totalCost: number;
+  treatments: Pick<Treatment, 'procedure' | 'tooth' | 'cost'>[];
+};

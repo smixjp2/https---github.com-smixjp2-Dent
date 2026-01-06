@@ -22,18 +22,21 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar";
-import { patients, treatments as initialTreatments, invoices as initialInvoices } from "@/lib/data";
+import { patients, treatments as initialTreatments, invoices as initialInvoices, treatmentPlans } from "@/lib/data";
 import DentalChart from "@/components/patients/dental-chart";
 import TreatmentsList from "@/components/patients/treatments-list";
 import BillingTable from "@/components/patients/billing-table";
+import TreatmentPlans from "@/components/patients/treatment-plans";
 import { useState } from "react";
-import type { Invoice, Treatment } from "@/lib/types";
+import type { Invoice, Treatment, TreatmentPlan } from "@/lib/types";
 import NewInvoiceDialog from "@/components/patients/new-invoice-dialog";
+
 
 export default function PatientDetailPage({ params }: { params: { id: string } }) {
   const patient = patients.find((p) => p.id === params.id);
   const [treatments, setTreatments] = useState<Treatment[]>(initialTreatments);
   const [invoices, setInvoices] = useState<Invoice[]>(initialInvoices);
+  const [plans, setPlans] = useState<TreatmentPlan[]>(treatmentPlans);
 
   if (!patient) {
     return (
@@ -100,10 +103,11 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                 </Card>
 
                 <Tabs defaultValue="chart">
-                    <TabsList className="grid w-full grid-cols-4">
+                    <TabsList className="grid w-full grid-cols-5">
                         <TabsTrigger value="info">Infos & Notes</TabsTrigger>
                         <TabsTrigger value="chart">Schéma Dentaire</TabsTrigger>
                         <TabsTrigger value="history">Historique Soins</TabsTrigger>
+                        <TabsTrigger value="plans">Plans de traitement</TabsTrigger>
                         <TabsTrigger value="billing">Facturation</TabsTrigger>
                     </TabsList>
                     <TabsContent value="info">
@@ -152,6 +156,9 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                                 <TreatmentsList treatments={treatments} />
                              </CardContent>
                         </Card>
+                    </TabsContent>
+                    <TabsContent value="plans">
+                        <TreatmentPlans treatmentPlans={plans} />
                     </TabsContent>
                     <TabsContent value="billing">
                         <Card>

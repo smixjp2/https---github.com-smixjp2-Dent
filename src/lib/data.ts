@@ -1,4 +1,4 @@
-import type { Patient, Appointment, Treatment, Invoice, InventoryItem } from '@/lib/types';
+import type { Patient, Appointment, Treatment, Invoice, InventoryItem, TreatmentPlan } from '@/lib/types';
 
 export const patients: Patient[] = [
   {
@@ -118,4 +118,30 @@ export const inventory: InventoryItem[] = [
     { id: '4', name: 'Composites de restauration (seringue)', stock: 15, maxStock: 30, status: 'In Stock' },
     { id: '5', name: 'Fraises dentaires (unité)', stock: 0, maxStock: 200, status: 'Out of Stock' },
     { id: '6', name: 'Ciment verre ionomère', stock: 5, maxStock: 20, status: 'Low Stock' },
+];
+
+export const treatmentPlans: TreatmentPlan[] = [
+    {
+        id: 'PLAN-001',
+        title: 'Plan de restauration complet',
+        date: '2024-05-10',
+        status: 'Accepted',
+        totalCost: 8500,
+        treatments: [
+            { tooth: 15, procedure: 'Couronne Céramique', cost: 3500 },
+            { tooth: 26, procedure: 'Inlay-core + Couronne', cost: 4500 },
+            { tooth: 46, procedure: 'Soin Carie', cost: 500 },
+        ],
+    },
+    {
+        id: 'PLAN-002',
+        title: 'Plan esthétique',
+        date: '2024-06-20',
+        status: 'Proposed',
+        totalCost: 6000,
+        treatments: [
+            { tooth: 11, procedure: 'Blanchiment interne', cost: 2000 },
+            { tooth: 21, procedure: 'Facette céramique', cost: 4000 },
+        ],
+    },
 ];
