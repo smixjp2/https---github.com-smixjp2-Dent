@@ -1,13 +1,13 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormStatus } from "react-dom";
 import { generateReminderAction } from "@/lib/actions";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useActionState } from "react";
 import { Bot, Clipboard, Send, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -44,7 +44,7 @@ function SubmitButton() {
 }
 
 export default function ReminderGenerator() {
-  const [state, formAction] = useFormState(generateReminderAction, initialState);
+  const [state, formAction] = useActionState(generateReminderAction, initialState);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
 
