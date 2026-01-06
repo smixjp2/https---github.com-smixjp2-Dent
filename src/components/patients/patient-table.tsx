@@ -14,7 +14,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, PlusCircle } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -39,7 +39,8 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar";
 import type { Patient } from "@/lib/types";
-import { patients as data } from "@/lib/data";
+import { patients as initialData } from "@/lib/data";
+import NewPatientDialog from "./new-patient-dialog";
 
 const columns: ColumnDef<Patient>[] = [
   {
@@ -104,10 +105,23 @@ const columns: ColumnDef<Patient>[] = [
 ];
 
 export function PatientTable() {
+  const [data, setData] = React.useState<Patient[]>(initialData);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+
+  const handleAddPatient = (newPatientData: Omit<Patient, "id" | "avatar" | "allergies" | "medicalHistory" | "notes">) => {
+    const newPatient: Patient = {
+      ...newPatientData,
+      id: (data.length + 1).toString(),
+      avatar: `https://picsum.photos/seed/${data.length + 1}/100/100`,
+      allergies: [],
+      medicalHistory: [],
+      notes: "",
+    };
+    setData(prevData => [...prevData, newPatient]);
+  };
 
   const table = useReactTable({
     data,
@@ -139,10 +153,7 @@ export function PatientTable() {
           }
           className="max-w-sm"
         />
-        <Button className="ml-auto">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Nouveau patient
-        </Button>
+        <NewPatientDialog onAddPatient={handleAddPatient} />
       </div>
       <div className="rounded-md border">
         <Table>
