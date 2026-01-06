@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -16,11 +17,13 @@ import {
   Package,
   Settings,
   LifeBuoy,
+  Calendar,
 } from "lucide-react";
 
 const navItems = [
   { href: "/", label: "Tableau de bord", icon: LayoutDashboard },
   { href: "/patients", label: "Patients", icon: Users },
+  { href: "/calendar", label: "Calendrier", icon: Calendar },
   { href: "/inventory", label: "Stock", icon: Package },
 ];
 
