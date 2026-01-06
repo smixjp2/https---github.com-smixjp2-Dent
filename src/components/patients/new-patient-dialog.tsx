@@ -1,16 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import type { Patient } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
   DialogFooter,
-  DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -20,10 +17,10 @@ import { PlusCircle } from "lucide-react";
 
 interface NewPatientDialogProps {
   onAddPatient: (newPatient: Omit<Patient, "id" | "avatar" | "allergies" | "medicalHistory" | "notes">) => void;
+  closeDialog: () => void;
 }
 
-export default function NewPatientDialog({ onAddPatient }: NewPatientDialogProps) {
-  const [isOpen, setIsOpen] = useState(false);
+export default function NewPatientDialog({ onAddPatient, closeDialog }: NewPatientDialogProps) {
   const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -46,18 +43,11 @@ export default function NewPatientDialog({ onAddPatient }: NewPatientDialogProps
 
     onAddPatient({ name, email, phone, dateOfBirth, address });
     toast({ title: "Succès", description: "Patient ajouté." });
-    setIsOpen(false);
     e.currentTarget.reset();
+    closeDialog();
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button className="ml-auto">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Nouveau patient
-        </Button>
-      </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Ajouter un nouveau patient</DialogTitle>
@@ -96,6 +86,5 @@ export default function NewPatientDialog({ onAddPatient }: NewPatientDialogProps
           </DialogFooter>
         </form>
       </DialogContent>
-    </Dialog>
   );
 }

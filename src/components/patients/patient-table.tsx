@@ -14,7 +14,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, PlusCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -41,6 +41,7 @@ import {
 import type { Patient } from "@/lib/types";
 import { patients as initialData } from "@/lib/data";
 import NewPatientDialog from "./new-patient-dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
 const columns: ColumnDef<Patient>[] = [
   {
@@ -110,6 +111,8 @@ export function PatientTable() {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [isNewPatientDialogOpen, setIsNewPatientDialogOpen] = React.useState(false);
+
 
   const handleAddPatient = (newPatientData: Omit<Patient, "id" | "avatar" | "allergies" | "medicalHistory" | "notes">) => {
     const newPatient: Patient = {
@@ -121,6 +124,7 @@ export function PatientTable() {
       notes: "",
     };
     setData(prevData => [...prevData, newPatient]);
+    setIsNewPatientDialogOpen(false);
   };
 
   const table = useReactTable({
@@ -153,7 +157,15 @@ export function PatientTable() {
           }
           className="max-w-sm"
         />
-        <NewPatientDialog onAddPatient={handleAddPatient} />
+        <Dialog open={isNewPatientDialogOpen} onOpenChange={setIsNewPatientDialogOpen}>
+          <DialogTrigger asChild>
+            <Button className="ml-auto">
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Nouveau patient
+            </Button>
+          </DialogTrigger>
+          <NewPatientDialog onAddPatient={handleAddPatient} closeDialog={() => setIsNewPatientDialogOpen(false)}/>
+        </Dialog>
       </div>
       <div className="rounded-md border">
         <Table>
