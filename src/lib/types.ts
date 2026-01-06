@@ -34,6 +34,7 @@ export type Invoice = {
   date: string;
   description: string;
   amount: number;
+  paidAmount: number;
   status: 'Paid' | 'Partial' | 'Unpaid';
 };
 

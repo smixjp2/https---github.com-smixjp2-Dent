@@ -105,10 +105,9 @@ export const treatments: Treatment[] = [
 ];
 
 export const invoices: Invoice[] = [
-    { id: 'INV-001', date: '2024-01-15', description: 'Détartrage', amount: 400, status: 'Paid' },
-    { id: 'INV-002', date: '2023-09-05', description: 'Couronne (Dent 36) - Acompte', amount: 1500, status: 'Partial' },
-    { id: 'INV-003', date: '2023-09-20', description: 'Couronne (Dent 36) - Solde', amount: 2000, status: 'Unpaid' },
-    { id: 'INV-004', date: '2023-11-20', description: 'Soin Carie (Dent 18)', amount: 500, status: 'Paid' },
+    { id: 'INV-001', date: '2024-01-15', description: 'Détartrage', amount: 400, paidAmount: 400, status: 'Paid' },
+    { id: 'INV-002', date: '2023-09-05', description: 'Couronne (Dent 36) - Acompte', amount: 3500, paidAmount: 1500, status: 'Partial' },
+    { id: 'INV-003', date: '2023-09-20', description: 'Soin Carie (Dent 18)', amount: 500, paidAmount: 0, status: 'Unpaid' },
 ];
 
 export const inventory: InventoryItem[] = [

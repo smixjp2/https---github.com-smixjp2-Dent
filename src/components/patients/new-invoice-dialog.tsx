@@ -20,7 +20,7 @@ import { FileText } from "lucide-react";
 import { format } from "date-fns";
 
 interface NewInvoiceDialogProps {
-    onAddInvoice: (newInvoice: Omit<Invoice, 'id' | 'status'>) => void;
+    onAddInvoice: (newInvoice: Omit<Invoice, 'id' | 'status' | 'paidAmount'>) => void;
 }
 
 export default function NewInvoiceDialog({ onAddInvoice }: NewInvoiceDialogProps) {

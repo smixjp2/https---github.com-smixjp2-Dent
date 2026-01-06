@@ -46,14 +46,29 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
     );
   }
 
-  const handleAddInvoice = (newInvoice: Omit<Invoice, 'id' | 'status'>) => {
+  const handleAddInvoice = (newInvoice: Omit<Invoice, 'id' | 'status' | 'paidAmount'>) => {
     const newInvoiceWithId: Invoice = {
       ...newInvoice,
       id: `INV-${(invoices.length + 1).toString().padStart(3, '0')}`,
       status: 'Unpaid',
+      paidAmount: 0,
     };
     setInvoices(prevInvoices => [...prevInvoices, newInvoiceWithId]);
   };
+
+  const handleAddPayment = (invoiceId: string, paymentAmount: number) => {
+    setInvoices(prevInvoices => 
+      prevInvoices.map(invoice => {
+        if (invoice.id === invoiceId) {
+          const newPaidAmount = invoice.paidAmount + paymentAmount;
+          const newStatus = newPaidAmount >= invoice.amount ? 'Paid' : newPaidAmount > 0 ? 'Partial' : 'Unpaid';
+          return { ...invoice, paidAmount: newPaidAmount, status: newStatus };
+        }
+        return invoice;
+      })
+    );
+  };
+
 
   return (
     <div className="flex flex-col h-full">
@@ -164,7 +179,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                         <Card>
                             <CardHeader><CardTitle>Historique de facturation</CardTitle></CardHeader>
                             <CardContent>
-                                <BillingTable invoices={invoices} />
+                                <BillingTable invoices={invoices} onAddPayment={handleAddPayment} />
                             </CardContent>
                         </Card>
                     </TabsContent>
